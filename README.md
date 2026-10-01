@@ -6,7 +6,7 @@ Open a file, review each candidate, choose what to convert, and download a new c
 
 **Experimental v0.1.** A small, conservative repair tool for teaching handouts and simple notes. It is not a universal LaTeX converter. Always keep the original and open the output in Word to check both layout and editability.
 
-[中文说明](README.zh-CN.md) · [Supported syntax](docs/supported-syntax.md) · [Validation](docs/validation.md) · [Security](SECURITY.md)
+[Try the live demo](https://mozzie49.github.io/equation-rescue/) · [CI and deployed-site checks](https://github.com/mozzie49/equation-rescue/actions/workflows/ci.yml) · [中文说明](README.zh-CN.md) · [Supported syntax](docs/supported-syntax.md) · [Validation](docs/validation.md) · [Security](SECURITY.md)
 
 ## See the actual result
 
@@ -28,7 +28,7 @@ npm ci
 npm run dev
 ```
 
-Open the local address printed by Vite. Choose **Try the teaching handout** or select your own `.docx`. Review the source and approximate math previews, skip anything you want to keep, and download the repaired copy. The separate JSON report contains the filename and equation source, so treat it like part of the original document.
+Open the local address printed by Vite. Choose **Try the teaching sample** or select your own `.docx`. Review the source and approximate math previews, skip anything you want to keep, and download the repaired copy. The separate JSON report contains the filename and equation source, so treat it like part of the original document.
 
 To build a static deployment:
 
@@ -71,7 +71,7 @@ npm run test:e2e           # upload/review/export/browser privacy checks
 npm run samples           # regenerate after DOCX/report from checked-in before
 ```
 
-The GitHub Actions workflow runs unit tests, the production build and Chromium tests. A configured workflow is not a passing CI run. The current verification record distinguishes actual passes from unrun checks in [docs/validation.md](docs/validation.md).
+The GitHub Actions workflow runs 62 unit tests, the production build, a production dependency audit and nine Chromium tests before deployment. A separate smoke test then exercises the real deployed Pages URL and verifies downloaded DOCX/report bytes. The current verification record distinguishes actual passes from unrun checks in [docs/validation.md](docs/validation.md).
 
 The source fixture can be recreated with `python scripts/generate-sample.py` using `python-docx`. The resulting DOCX should be rendered and visually checked whenever the fixture is changed.
 

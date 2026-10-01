@@ -6,7 +6,7 @@
 
 **v0.1 为实验版。** 面向简单讲义与笔记，不是通用 LaTeX 转换器。请保留原文件，并在 Word 中检查输出的排版和公式可编辑性。
 
-[English](README.md) · [支持范围](docs/supported-syntax.md) · [验证记录](docs/validation.md)
+[在线试用](https://mozzie49.github.io/equation-rescue/) · [CI 与线上检查](https://github.com/mozzie49/equation-rescue/actions/workflows/ci.yml) · [English](README.md) · [支持范围](docs/supported-syntax.md) · [验证记录](docs/validation.md)
 
 ## 快速开始
 
@@ -17,7 +17,7 @@ npm ci
 npm run dev
 ```
 
-打开 Vite 显示的本地地址，点击“试用教学讲义”，或选择自己的 `.docx`。界面支持中英文切换。下载的 JSON 报告包含文件名和公式源码，请像原文档一样保管。
+打开 Vite 显示的本地地址，点击“试用教学示例”，或选择自己的 `.docx`。界面支持中英文切换。下载的 JSON 报告包含文件名和公式源码，请像原文档一样保管。
 
 ```sh
 npm run check
@@ -53,7 +53,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-CI 配置存在，不代表 CI 已经运行通过。详见[验证记录](docs/validation.md)。
+GitHub Actions 在部署前运行 62 项单元测试、生产构建、生产依赖审计和 9 项 Chromium 浏览器测试；部署后再访问真实 Pages 地址，检查 DOCX 与报告下载内容。实际执行结果详见[验证记录](docs/validation.md)。
 
 ## 来源与许可证
 
