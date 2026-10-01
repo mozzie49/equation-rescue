@@ -1,0 +1,68 @@
+{
+  "version": "0.1.0",
+  "filename": "teaching-handout.docx",
+  "converted": 7,
+  "skipped": 0,
+  "unsupported": 1,
+  "changedParts": [
+    "word/document.xml"
+  ],
+  "warnings": [
+    "Existing document links and embedded content are preserved. This tool is not a malware scanner; use trusted documents.",
+    "Equations may change line heights and pagination. Surrounding formatting is preserved, but identical layout is not guaranteed.",
+    "Only ordinary body paragraphs and table cells are scanned. Headers, footers, notes, text boxes and comments are left untouched.",
+    "Browser preview is approximate. Open the output in Word and check layout and equation editability before relying on it."
+  ],
+  "validation": "Well-formed XML, supported native OMML structures, and unchanged raw ZIP records outside word/document.xml. Microsoft Word application rendering and editability are not automatically verified.",
+  "equations": [
+    {
+      "id": "eq-1",
+      "source": "\\(x^2 + 2x + 1\\)",
+      "paragraph": 4,
+      "status": "converted"
+    },
+    {
+      "id": "eq-2",
+      "source": "\\(A = \\pi r^2\\)",
+      "paragraph": 5,
+      "status": "converted"
+    },
+    {
+      "id": "eq-3",
+      "source": "\\[x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\\]",
+      "paragraph": 8,
+      "status": "converted"
+    },
+    {
+      "id": "eq-4",
+      "source": "$$\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$$",
+      "paragraph": 9,
+      "status": "converted"
+    },
+    {
+      "id": "eq-5",
+      "source": "\\(\\frac{a+b}{c}\\)",
+      "paragraph": 14,
+      "status": "converted"
+    },
+    {
+      "id": "eq-6",
+      "source": "\\(y = \\sqrt{x^2 + 1}\\)",
+      "paragraph": 16,
+      "status": "converted"
+    },
+    {
+      "id": "eq-7",
+      "source": "\\(a_n = n^2 + \\alpha\\)",
+      "paragraph": 18,
+      "status": "converted"
+    },
+    {
+      "id": "eq-8",
+      "source": "\\[\\begin{matrix}1 & 0 \\\\ 0 & 1\\end{matrix}\\]",
+      "paragraph": 21,
+      "status": "unsupported",
+      "reason": "Unsupported command: \\begin"
+    }
+  ]
+}
