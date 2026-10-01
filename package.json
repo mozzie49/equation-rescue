@@ -1,0 +1,36 @@
+{
+  "name": "equation-rescue",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Review and repair explicit LaTeX in existing DOCX files locally in your browser.",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
+    "check": "npm test && npm run build",
+    "test:e2e": "playwright test",
+    "samples": "node --import tsx scripts/generate-sample.ts",
+    "format": "prettier --write \"src/**/*.{ts,css}\" \"tests/**/*.ts\" \"scripts/**/*.ts\" \"*.{ts,json,html,md}\" \"docs/**/*.md\" \".github/**/*.yml\""
+  },
+  "dependencies": {
+    "fflate": "0.8.3",
+    "katex": "0.16.22",
+    "saxes": "6.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/katex": "^0.16.7",
+    "@types/node": "^24.0.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
