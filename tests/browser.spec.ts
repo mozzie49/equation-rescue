@@ -250,7 +250,10 @@ test("untrusted source is literal text and complex paragraphs stay unchanged", a
     });
   await expect(page.locator("input[data-equation]")).toBeDisabled();
   await expect(page.locator(".unsupported-reason")).toContainText("bookmarks");
-  await page.getByText("What v0 can safely handle", { exact: true }).click();
+  const limitsSummary = page.locator("#limits > summary");
+  await expect(limitsSummary).toHaveAccessibleName("What v0 can safely handle");
+  await limitsSummary.click();
+  await expect(page.locator("#limits")).toHaveAttribute("open", "");
   await expect(
     page.getByText(
       "Paragraphs containing existing equations, fields, links, bookmarks, objects, or other complex structures are left unchanged.",
