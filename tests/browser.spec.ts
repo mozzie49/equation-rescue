@@ -68,6 +68,9 @@ test("source link stays discoverable without interrupting the trial", async ({
   await expect(source).toBeFocused();
   await page.getByRole("button", { name: "Try the teaching sample" }).click();
   await expect(page.getByTestId("ready-count")).toHaveText("7");
+  await expect(page.locator(".math-preview .katex")).toHaveCount(7);
+  await expect(page.locator(".math-preview math")).toHaveCount(7);
+  await expect(page.locator(".preview-fallback")).toHaveCount(0);
   await expect(source).toBeVisible();
   await page.getByRole("button", { name: "中文", exact: true }).click();
   await expect(
