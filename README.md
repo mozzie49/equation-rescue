@@ -71,7 +71,7 @@ npm run test:e2e           # upload/review/export/browser privacy checks
 npm run samples           # regenerate after DOCX/report from checked-in before
 ```
 
-The GitHub Actions workflow runs 62 unit tests, the production build, a production dependency audit and nine Chromium tests before deployment. A separate smoke test then exercises the real deployed Pages URL and verifies downloaded DOCX/report bytes. The current verification record distinguishes actual passes from unrun checks in [docs/validation.md](docs/validation.md).
+The GitHub Actions workflow runs 62 unit tests, the production build, a production dependency audit and ten Chromium tests before deployment. A separate smoke test then exercises the real deployed Pages URL and verifies downloaded DOCX/report bytes. The current verification record distinguishes actual passes from unrun checks in [docs/validation.md](docs/validation.md).
 
 The source fixture can be recreated with `python scripts/generate-sample.py` using `python-docx`. The resulting DOCX should be rendered and visually checked whenever the fixture is changed.
 
