@@ -53,7 +53,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-GitHub Actions 在部署前运行 62 项单元测试、生产构建、生产依赖审计和 9 项 Chromium 浏览器测试；部署后再访问真实 Pages 地址，检查 DOCX 与报告下载内容。实际执行结果详见[验证记录](docs/validation.md)。
+GitHub Actions 在部署前运行 62 项单元测试、生产构建、生产依赖审计和 10 项 Chromium 浏览器测试；部署后再访问真实 Pages 地址，检查 DOCX 与报告下载内容。实际执行结果详见[验证记录](docs/validation.md)。
 
 ## 来源与许可证
 
