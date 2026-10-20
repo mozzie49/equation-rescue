@@ -7,7 +7,7 @@ The application bundles these runtime dependencies and preserves their license n
 | fflate   | 0.8.3   | MIT                             | Deflate compression/decompression primitives       |
 | saxes    | 6.0.0   | ISC, including upstream notices | Namespace-aware XML parser                         |
 | xmlchars | 2.2.0   | MIT                             | XML character classification used by saxes         |
-| KaTeX    | 0.16.22 | MIT                             | Approximate browser math preview and bundled fonts |
+| KaTeX    | 0.18.2  | MIT                             | Approximate browser math preview and bundled fonts |
 
 Dependency versions are locked in package-lock.json. Development tools retain their own licenses in their installed packages. The complete project is not relicensed under a dependency's license.
 
