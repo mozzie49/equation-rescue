@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "fflate": "0.8.3",
-    "katex": "0.16.22",
+    "katex": "0.18.2",
     "saxes": "6.0.0"
   },
   "devDependencies": {

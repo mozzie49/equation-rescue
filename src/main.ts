@@ -30,6 +30,8 @@ const words = {
     skip: "Skip to document workspace",
     tagline: "A careful repair for your documents",
     local: "Runs in your browser",
+    repositorySource: "Source on GitHub",
+    sourceLabel: "Source on GitHub (opens in a new tab)",
     experimental: "v0 · Experimental",
     language: "Language",
     eyebrow: "FROM LATEX TO WORD EQUATIONS",
@@ -149,6 +151,8 @@ const words = {
     skip: "跳转到文档工作区",
     tagline: "谨慎修复，保留文档",
     local: "在浏览器中本地处理",
+    repositorySource: "GitHub 源码",
+    sourceLabel: "GitHub 源码（在新标签页中打开）",
     experimental: "v0 · 实验版本",
     language: "语言",
     eyebrow: "从 LATEX 到 WORD 公式",
@@ -325,7 +329,7 @@ function render() {
       : "EquationRescue · Repair Word equations";
   app.innerHTML = `
     <a class="skip-link" href="#workspace">${t.skip}</a>
-    <header class="site-header"><a class="brand" href="#" aria-label="EquationRescue"><span class="brand-mark" aria-hidden="true">E<span>r</span></span><span>Equation<span class="brand-light">Rescue</span></span></a><div class="header-tools"><span class="local-status"><span class="status-dot"></span>${t.local}</span><fieldset class="language-switch"><legend class="visually-hidden">${t.language}</legend><button type="button" data-lang="en" aria-pressed="${language === "en"}">EN</button><button type="button" data-lang="zh" aria-pressed="${language === "zh"}">中文</button></fieldset></div></header>
+    <header class="site-header"><div class="brand-group"><a class="brand" href="#" aria-label="EquationRescue"><span class="brand-mark" aria-hidden="true">E<span>r</span></span><span>Equation<span class="brand-light">Rescue</span></span></a><a class="source-link" href="https://github.com/mozzie49/equation-rescue" target="_blank" rel="noopener noreferrer" aria-label="${t.sourceLabel}">${t.repositorySource}</a></div><div class="header-tools"><span class="local-status"><span class="status-dot"></span>${t.local}</span><fieldset class="language-switch"><legend class="visually-hidden">${t.language}</legend><button type="button" data-lang="en" aria-pressed="${language === "en"}">EN</button><button type="button" data-lang="zh" aria-pressed="${language === "zh"}">中文</button></fieldset></div></header>
     <main>
       <section class="hero ${inspection || reading ? "hero-compact" : ""}" aria-labelledby="hero-title"><div class="hero-copy"><div class="eyebrow"><span>${t.eyebrow}</span><span class="version">${t.experimental}</span></div><h1 id="hero-title">${t.title.replace("\n", inspection || reading ? " " : "<br>")}</h1><p class="hero-intro">${t.intro}</p><ol class="workflow">${t.workflow.map((step, i) => `<li><span>${String(i + 1).padStart(2, "0")}</span>${step}</li>`).join("")}</ol></div><div class="transformation"><div class="before-example"><span class="small-label">${t.before}</span><pre id="example-source"></pre></div><div class="transformation-arrow">${icon("arrow")}</div><div class="after-example"><span class="small-label">${t.after}</span><div id="example-preview"></div></div><p class="example-caption">${t.sampleCaption}</p></div></section>
       <div class="workspace-shell"><section id="workspace" class="workspace" aria-label="${t.workspace}" tabindex="-1"><div id="notice-slot"></div><input id="file-input" type="file" accept=".docx,${DOCX_TYPE}" class="visually-hidden" aria-label="${t.choose}" tabindex="-1"><div id="workspace-content"></div></section><aside class="assurance"><div class="privacy-icon">${icon("shield")}</div><div><h2>${t.privacyTitle}</h2><p>${t.privacy}</p></div></aside></div>

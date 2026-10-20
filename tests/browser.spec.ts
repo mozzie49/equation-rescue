@@ -48,6 +48,42 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
+test("source link stays discoverable without interrupting the trial", async ({
+  page,
+}) => {
+  const source = page.getByRole("link", {
+    name: "Source on GitHub (opens in a new tab)",
+    exact: true,
+  });
+  await expect(source).toBeVisible();
+  await expect(source).toHaveAttribute(
+    "href",
+    "https://github.com/mozzie49/equation-rescue",
+  );
+  await expect(source).toHaveAttribute("target", "_blank");
+  await expect(source).toHaveAttribute("rel", "noopener noreferrer");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await expect(source).toBeFocused();
+  await page.getByRole("button", { name: "Try the teaching sample" }).click();
+  await expect(page.getByTestId("ready-count")).toHaveText("7");
+  await expect(page.locator(".math-preview .katex")).toHaveCount(7);
+  await expect(page.locator(".math-preview math")).toHaveCount(7);
+  await expect(page.locator(".preview-fallback")).toHaveCount(0);
+  await expect(source).toBeVisible();
+  await page.getByRole("button", { name: "中文", exact: true }).click();
+  await expect(
+    page.getByRole("link", {
+      name: "GitHub 源码（在新标签页中打开）",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByTestId("ready-count")).toHaveText("7");
+  await page.getByRole("button", { name: "重置", exact: true }).click();
+  await expect(page.locator(".source-link")).toBeVisible();
+});
+
 test("upload, review, individual selection, select all and skip all", async ({
   page,
 }) => {
@@ -302,8 +338,9 @@ test("canceling a pending sample cannot replace a newer uploaded file", async ({
 test("narrow phone layout and local-only requests", async ({ page }) => {
   const requests: string[] = [];
   page.on("request", (request) => requests.push(request.url()));
-  await page.setViewportSize({ width: 375, height: 812 });
+  await page.setViewportSize({ width: 320, height: 812 });
   await page.reload();
+  await expect(page.locator(".source-link")).toBeInViewport();
   await assertNoHorizontalOverflow(page);
   await page.getByRole("button", { name: "Try the teaching sample" }).click();
   await expect(page.locator(".equation-card")).toHaveCount(8);
