@@ -10,6 +10,8 @@
 
 ## 快速开始
 
+[直接打开教学示例](https://mozzie49.github.io/equation-rescue/?sample=1&lang=zh)，无需准备自己的文件。此链接只会载入公开的内置 DOCX 供逐项检查；只有点击下载按钮才会保存输出副本。使用 `lang=en` 可切换为英文，省略 `lang` 则使用浏览器语言。普通首页不会自动加载文档。
+
 需要 Node 22.12+ 或 Node 24。
 
 ```sh
@@ -53,7 +55,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-GitHub Actions 在部署前运行 62 项单元测试、生产构建、生产依赖审计和 10 项 Chromium 浏览器测试；部署后再访问真实 Pages 地址，检查 DOCX 与报告下载内容。实际执行结果详见[验证记录](docs/validation.md)。
+GitHub Actions 在部署前运行 62 项单元测试、生产构建、生产依赖审计和 16 项 Chromium 浏览器测试；部署后再通过 3 项冒烟测试访问真实 Pages 地址，检查 DOCX 与报告下载内容。实际执行结果详见[验证记录](docs/validation.md)。
 
 ## 来源与许可证
 
