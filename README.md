@@ -10,6 +10,8 @@ Open a file, review each candidate, choose what to convert, and download a new c
 
 ## See the actual result
 
+[Open the teaching sample directly](https://mozzie49.github.io/equation-rescue/?sample=1&lang=en) — no file of your own needed. This loads only the bundled public DOCX for review; No output file is saved until you click a download button. Use `lang=zh` for Chinese, or omit `lang` to use your browser language. The ordinary homepage does not automatically load a document.
+
 The bundled original handout has eight candidates: seven supported equations, including one split across bold and italic runs, and one deliberately unsupported matrix. The matrix remains source text. These are **LibreOffice renderings of the actual DOCX files**, not a screenshot of Microsoft Word and not a guarantee of Word compatibility.
 
 <p>
@@ -71,7 +73,7 @@ npm run test:e2e           # upload/review/export/browser privacy checks
 npm run samples           # regenerate after DOCX/report from checked-in before
 ```
 
-The GitHub Actions workflow runs 62 unit tests, the production build, a production dependency audit and ten Chromium tests before deployment. A separate smoke test then exercises the real deployed Pages URL and verifies downloaded DOCX/report bytes. The current verification record distinguishes actual passes from unrun checks in [docs/validation.md](docs/validation.md).
+The GitHub Actions workflow runs 62 unit tests, the production build, a production dependency audit and 16 Chromium tests before deployment. Three separate smoke tests then exercise the real deployed Pages URL and verify downloaded DOCX/report bytes. The current verification record distinguishes actual passes from unrun checks in [docs/validation.md](docs/validation.md).
 
 The source fixture can be recreated with `python scripts/generate-sample.py` using `python-docx`. The resulting DOCX should be rendered and visually checked whenever the fixture is changed.
 
