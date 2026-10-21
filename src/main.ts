@@ -256,9 +256,14 @@ const words = {
       "公式可能改变行高和分页。周围的格式将保留，但不能保证排版完全相同。",
   },
 };
-let language: Language = navigator.language.toLowerCase().startsWith("zh")
-  ? "zh"
-  : "en";
+const entryParameters = new URLSearchParams(window.location.search);
+const entryLanguage = entryParameters.get("lang");
+let language: Language =
+  entryLanguage === "en" || entryLanguage === "zh"
+    ? entryLanguage
+    : navigator.language.toLowerCase().startsWith("zh")
+      ? "zh"
+      : "en";
 let inspection: Inspection | null = null;
 let selected = new Set<string>();
 let reading = false;
@@ -774,3 +779,6 @@ window.addEventListener("drop", (event) => {
   if (event.dataTransfer?.types.includes("Files")) event.preventDefault();
 });
 render();
+// Read once at startup, not on render/reset. Only this bundled public fixture
+// can be loaded by a URL; downloads still require an explicit button click.
+if (entryParameters.get("sample") === "1") void loadSample();
