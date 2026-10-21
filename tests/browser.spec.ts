@@ -48,6 +48,104 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
+for (const language of ["en", "zh"] as const) {
+  test(`sample deep link opens the review in ${language} without exporting`, async ({
+    page,
+  }) => {
+    const downloads: string[] = [];
+    const documents: string[] = [];
+    page.on("download", (download) =>
+      downloads.push(download.suggestedFilename()),
+    );
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname.endsWith(".docx"))
+        documents.push(request.url());
+    });
+    await page.goto(
+      `/?sample=1&lang=${language}&file=https://example.invalid/private.docx`,
+    );
+    await expect(page.locator("html")).toHaveAttribute(
+      "lang",
+      language === "zh" ? "zh-CN" : "en",
+    );
+    await expect(page.locator("#filename")).toHaveText(sampleName);
+    await expect(page.locator(".equation-card")).toHaveCount(8);
+    await expect(page.getByTestId("ready-count")).toHaveText("7");
+    await expect(page.getByTestId("unsupported-count")).toHaveText("1");
+    await expect(page.locator(".math-preview .katex")).toHaveCount(7);
+    await page.locator("#reset").click();
+    await expect(page.locator("#sample")).toBeVisible();
+    await page.locator('[data-lang="en"]').click();
+    await expect(page.locator(".equation-card")).toHaveCount(0);
+    expect(documents).toHaveLength(1);
+    expect(new URL(documents[0]).pathname).toBe(
+      "/examples/teaching-handout.docx",
+    );
+    expect(new URL(documents[0]).origin).toBe(new URL(page.url()).origin);
+    expect(downloads).toEqual([]);
+  });
+}
+
+test("ordinary homepage and invalid sample parameters do not fetch a document", async ({
+  page,
+}) => {
+  const documents: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.endsWith(".docx"))
+      documents.push(request.url());
+  });
+  for (const query of [
+    "",
+    "?sample=0",
+    "?sample=true",
+    "?sample=",
+    "?sample=https://example.invalid/file.docx&lang=invalid",
+  ]) {
+    await page.goto(`/${query}`);
+    await expect(page.locator("#sample")).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.locator(".equation-card")).toHaveCount(0);
+  }
+  expect(documents).toEqual([]);
+});
+
+test("missing or invalid language uses browser language and valid language overrides it", async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, "language", { get: () => "zh-CN" }),
+  );
+  for (const query of [
+    "?sample=1",
+    "?sample=1&lang=invalid",
+    "?sample=1&lang=en",
+  ]) {
+    await page.goto(`/${query}`);
+    await expect(page.locator("#filename")).toHaveText(sampleName);
+    await expect(page.locator("html")).toHaveAttribute(
+      "lang",
+      query.endsWith("lang=en") ? "en" : "zh-CN",
+    );
+  }
+});
+
+test("failed deep-link sample can be retried with the sample button", async ({
+  page,
+}) => {
+  await page.route("**/examples/teaching-handout.docx", (route) =>
+    route.fulfill({ status: 503, body: "unavailable" }),
+  );
+  await page.goto("/?sample=1&lang=en");
+  await expect(page.getByRole("alert")).toContainText(
+    "The sample could not be loaded",
+  );
+  await expect(page.locator("#sample")).toBeVisible();
+  await page.unroute("**/examples/teaching-handout.docx");
+  await page.locator("#sample").click();
+  await expect(page.locator("#filename")).toHaveText(sampleName);
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});
+
 test("source link stays discoverable without interrupting the trial", async ({
   page,
 }) => {
@@ -298,42 +396,46 @@ test("untrusted source is literal text and complex paragraphs stay unchanged", a
   ).toBeVisible();
 });
 
-test("canceling a pending sample cannot replace a newer uploaded file", async ({
-  page,
-}) => {
-  let release!: () => void;
-  const gate = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  let intercepted!: () => void;
-  const interception = new Promise<void>((resolve) => {
-    intercepted = resolve;
-  });
-  await page.route("**/examples/teaching-handout.docx", async (route) => {
-    intercepted();
-    await gate;
-    await route
-      .fulfill({ body: await readFile(samplePath), contentType: docxType })
-      .catch(() => {});
-  });
-  await page.getByRole("button", { name: "Try the teaching sample" }).click();
-  await interception;
-  await expect(
-    page.getByRole("heading", { name: "Inspecting your document…" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Cancel", exact: true }).click();
-  await page
-    .locator("#file-input")
-    .setInputFiles({
+for (const entry of ["button", "deep link"] as const) {
+  test(`canceling a pending sample from ${entry} cannot replace a newer uploaded file`, async ({
+    page,
+  }) => {
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let intercepted!: () => void;
+    const interception = new Promise<void>((resolve) => {
+      intercepted = resolve;
+    });
+    await page.route("**/examples/teaching-handout.docx", async (route) => {
+      intercepted();
+      await gate;
+      await route
+        .fulfill({ body: await readFile(samplePath), contentType: docxType })
+        .catch(() => {});
+    });
+    if (entry === "deep link") await page.goto("/?sample=1&lang=en");
+    else
+      await page
+        .getByRole("button", { name: "Try the teaching sample" })
+        .click();
+    await interception;
+    await expect(
+      page.getByRole("heading", { name: "Inspecting your document…" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Cancel", exact: true }).click();
+    await page.locator("#file-input").setInputFiles({
       name: "newer.docx",
       mimeType: docxType,
       buffer: fixture(String.raw`\(x^2\)`),
     });
-  release();
-  await expect(page.locator("#filename")).toHaveText("newer.docx");
-  await expect(page.locator(".equation-card")).toHaveCount(1);
-  await expect(page.getByTestId("ready-count")).toHaveText("1");
-});
+    release();
+    await expect(page.locator("#filename")).toHaveText("newer.docx");
+    await expect(page.locator(".equation-card")).toHaveCount(1);
+    await expect(page.getByTestId("ready-count")).toHaveText("1");
+  });
+}
 
 test("narrow phone layout and local-only requests", async ({ page }) => {
   const requests: string[] = [];

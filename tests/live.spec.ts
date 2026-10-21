@@ -64,3 +64,21 @@ test("deployed sample, selective downloads, upload and unchanged export", async 
   const unchanged = await unchangedPromise;
   expect(await readFile((await unchanged.path())!)).toEqual(await readFile(samplePath));
 });
+
+for (const language of ["en", "zh"] as const) {
+  test(`deployed sample deep link in ${language}`, async ({ page }) => {
+    const downloads: string[] = [];
+    page.on("download", (download) => downloads.push(download.suggestedFilename()));
+    await page.goto(`./?sample=1&lang=${language}`);
+    await expect(page.locator("html")).toHaveAttribute("lang", language === "zh" ? "zh-CN" : "en");
+    await expect(page.locator("#filename")).toHaveText("teaching-handout.docx");
+    await expect(page.locator(".equation-card")).toHaveCount(8);
+    await expect(page.getByTestId("ready-count")).toHaveText("7");
+    await expect(page.getByTestId("unsupported-count")).toHaveText("1");
+    await expect(page.locator(".math-preview .katex")).toHaveCount(7);
+    await page.locator("#reset").click();
+    await expect(page.locator("#sample")).toBeVisible();
+    await expect(page.locator(".equation-card")).toHaveCount(0);
+    expect(downloads).toEqual([]);
+  });
+}
